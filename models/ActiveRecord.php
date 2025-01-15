@@ -53,16 +53,19 @@ class ActiveRecord{
         //Sanitizar entradas
         $atributos = $this->sanitizarAtributos();
         
+        
         $valores = [];
 
         foreach($atributos as $key => $value){
             $valores[] = "{$key}='{$value}'";
         }
-       
+        
+
         $query = "UPDATE ".static::$tabla." SET ";
         $query .= join(', ',$valores);
         $query .= " WHERE id = '" . self::$db->escape_string($this->id) . "' ";
         $query .= " LIMIT 1";
+        
         
 
         $resultado = self::$db->query($query);
@@ -74,10 +77,18 @@ class ActiveRecord{
     }
 
     public function eliminar(){
-        //Eliminar propiedad
-        $query = "DELETE FROM ".static::$tabla." WHERE id = ". self::$db->escape_string($this->id);
-        $resultado = self::$db->query($query);
+        //Desvincular vendedor en caso de tener propiedad asignada   
+        
+        if(static::$tabla === 'vendedores'){
+            $query = "UPDATE propiedades SET vendedores_id = NULL where vendedores_id =  ".self::$db->escape_string($this->id);
+            
+            self::$db->query($query);
+        }
 
+        $query = "DELETE FROM ".static::$tabla." WHERE id = ". self::$db->escape_string($this->id);
+
+        $resultado = self::$db->query($query);
+        
         if($resultado){
             $this->eliminarImagen();
             header("Location: /admin?resultado=3");
@@ -86,7 +97,7 @@ class ActiveRecord{
 
     public function atributos(){
         $atributos = [];
-
+        
         foreach(static::$camposDB as $campo){
             if($campo === 'id') continue;
             $atributos[$campo] = $this->$campo; 
@@ -184,9 +195,11 @@ class ActiveRecord{
 
     public function sincronizar($args =[]){
         foreach($args as $key => $value){
+            
             if(property_exists($this,$key) && !is_null($value)){
                 $this->$key =$value;
             }
         }
+        
     }
 }

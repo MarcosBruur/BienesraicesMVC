@@ -76,12 +76,12 @@ class PropiedadController{
         $errores = Propiedad::getErrores();
         $vendedores = Vendedor::all();
 
+        
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
     
     
             //Asignar los atributos
             $args = $_POST['propiedad'];
-            
             
             $propiedad->sincronizar($args);
             
