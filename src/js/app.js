@@ -11,11 +11,19 @@ const darkMode = () => {
     } else {
         document.body.classList.remove('dark-mode');
     }
-
     botonDarkMode = document.querySelector('.dark-mode-boton');
+
+
     botonDarkMode.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
+
+        const nuevoSrc = document.body.classList.contains('dark-mode')
+            ? "/build/img/light-mode.svg"
+            : "/build/img/dark-mode.svg";
+
+        botonDarkMode.setAttribute('src', nuevoSrc);
     })
+
 }
 
 
