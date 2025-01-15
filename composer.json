@@ -1,0 +1,21 @@
+{
+    "name": "lenovo/bienesraices",
+    "description": "Creando un proyecto con POO",
+    "type": "proyect",
+    "authors": [
+        {
+            "name": "marcos"
+        }
+    ],
+    "require": {
+        "intervention/image": "^3.9",
+        "phpmailer/phpmailer": "^6.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Model\\" :"./models",
+            "MVC\\" : "./",
+            "Controllers\\" : "./controllers"
+        }
+    }
+}
