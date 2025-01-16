@@ -8,21 +8,31 @@
     background-color: lighten($gris, 5);
     border: 1px solid $gris;
     margin-bottom: 2rem;
+    display: flex; 
+    flex-direction: column;
 
     .contenido-anuncio{
+        flex: 1;
         padding: 2rem;
-
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         h3,p{
             margin: 0;
         }
+
         
     }
+
+   
 }
 .precio{
     color: $verde;
     font-weight: $bold;
     font-size: 2.4rem;
 }
+
+
 
 .iconos-caracteristicas{
     display: flex;
