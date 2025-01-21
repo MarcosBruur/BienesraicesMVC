@@ -16,13 +16,13 @@
                                     <img class="icono" src="build/img/icono_wc.svg"
                                         alt="icono wc"
                                         loading="lazy">
-                                    <p><?php echo $propiedad->wc?></p>
+                                    <p><?php ?></p>
                                 </li>
                                 <li>
                                     <img class="icono"
                                         src="build/img/icono_estacionamiento.svg"
                                         alt="icono estacionamiento" loading="lazy">
-                                    <p><?php echo $propiedad->estacionamientos?></p>
+                                    <p><?php ?></p>
                                 </li>
 
                                 <li>
@@ -30,7 +30,7 @@
                                         src="build/img/icono_dormitorio.svg"
                                         alt="icono dormitorio"
                                         loading="lazy">
-                                    <p><?php echo $propiedad->habitaciones?></p>
+                                    <p><?php ?></p>
                                 </li>
 
                             </ul>

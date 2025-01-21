@@ -24,15 +24,15 @@
 
             <label for="habitaciones">Habitaciones</label>
             <input name="propiedad_caracteristicas[habitaciones]" type="number" id="habitaciones" placeholder="Ej:3" min="1"
-                max="9" value="<?php echo s($caracteristicas[0]->cantidad);?>">
+                max="9" value="<?php echo !empty($caracteristicas[0]->cantidad)?$caracteristicas[0]->cantidad:null ?>">
 
             <label for="wc">Baños</label>
             <input name="propiedad_caracteristicas[wc]" type="number" id="wc" placeholder="Ej:3" min="1"
-                max="9" value="<?php echo s($caracteristicas[1]->cantidad);?>">
+                max="9" value="<?php echo !empty($caracteristicas[1]->cantidad)?$caracteristicas[1]->cantidad:null  ?>">
 
             <label for="estacionamientos">Estacionamientos</label>
             <input name="propiedad_caracteristicas[estacionamientos]" type="number" id="estacionamientos" placeholder="Ej:3" min="1"
-                max="9" value="<?php echo s($caracteristicas[2]->cantidad);?>">
+                max="9" value="<?php echo !empty($caracteristicas[2]->cantidad)?$caracteristicas[2]->cantidad:null?>">
 
         </fieldset> 
 

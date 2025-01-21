@@ -17,9 +17,9 @@ class PropiedadCaracteristica extends ActiveRecord{
 
     public function __construct($args = []){
         $this->id = $args['id'] ?? null;
-        $this->propiedad_id = $args['propiedad_id'] ?? null;
-        $this->caracteristica_id = $args['caracteristica_id'] ?? null;
-        $this->cantidad = $args['cantidad'] ?? null;
+        !empty( $args['propiedad_id']) ? $this->propiedad_id: null;
+        $this->caracteristica_id = $args['caracteristica_id'] ?? '';
+        $this->cantidad = $args['cantidad'] ?? '';
     }
 
     public function crear($retorno){

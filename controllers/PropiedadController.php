@@ -1,5 +1,6 @@
 <?php
 namespace Controllers;
+use Model\Caracteristica;
 use MVC\Router;
 use Model\Propiedad;
 use Model\Vendedor;
@@ -23,14 +24,15 @@ class PropiedadController{
     public static function crear(Router $router){
         $propiedad = new Propiedad();
         $vendedores = Vendedor::all();
-    
-
         $errores = Propiedad::getErrores();
         
         if($_SERVER['REQUEST_METHOD'] === 'POST'){ 
+            $caracteristicas = $_POST['propiedad_caracteristicas'];
             
             $propiedad = new Propiedad($_POST['propiedad']);
             
+
+
             //Generar nombre unico de imagen
             $nombreImagen = md5(uniqid(rand(),true) . '.jpg');
         
@@ -38,15 +40,9 @@ class PropiedadController{
                 $manager = new Image(Driver::class); 
                 $imagen = $manager->read($_FILES['propiedad']['tmp_name']['imagen'])->cover(800, 600);
                 $propiedad->setImagen($nombreImagen);
-                
             }
-        
-            
-            
-            
+
             $errores = $propiedad->validar();
-            
-        
             if(empty($errores)){
                 
                 if(!is_dir(CARPETA_IMAGENES)){
@@ -57,9 +53,10 @@ class PropiedadController{
                 $imagen->save(CARPETA_IMAGENES.$nombreImagen);
         
                 $caracteristicas = $_POST['propiedad_caracteristicas'];
+                
                 //Guardar nueva propiedad
                 $propiedad->guardar('admin',$caracteristicas);
-
+                
                 //Guardar caracteristicas de propiedad
                 
             }
@@ -102,13 +99,6 @@ class PropiedadController{
                     $i++;
                 }
             
-            
-            
-            
-
-            
-            
-            
             //Validacion
             $propiedad->validar();
         
@@ -135,18 +125,14 @@ class PropiedadController{
                 }
                 
             }
-        
-        
             
         }
         
-
         $router->render('/propiedades/actualizar',[
             "propiedad" => $propiedad,
+            "caracteristicas" => $caracteristicas,
             "errores" => $errores,
-            "vendedores" => $vendedores,
-            "caracteristicas" => $caracteristicas]);
-
+            "vendedores" => $vendedores]);
     }
 
     public static function eliminar(){
@@ -157,10 +143,10 @@ class PropiedadController{
     
             if($id){
                 $tipo = $_POST['tipo'];
-    
+                
                 if(validarTipoContenido($tipo)){
-                   $propiedad = Propiedad::find($id); 
-                   $propiedad->eliminar();
+                   $propiedad = Propiedad::find($id);
+                   $propiedad->eliminar('admin');
                 }
             }
             
