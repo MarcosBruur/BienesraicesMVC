@@ -23,18 +23,18 @@
             <legend>Informacion Propiedad</legend>
 
             <label for="habitaciones">Habitaciones</label>
-            <input name="propiedad[habitaciones]" type="number" id="habitaciones" placeholder="Ej:3" min="1"
-                max="9" value="<?php echo s($propiedad->habitaciones);?>">
+            <input name="propiedad_caracteristicas[habitaciones]" type="number" id="habitaciones" placeholder="Ej:3" min="1"
+                max="9" value="<?php echo s($caracteristicas[0]->cantidad);?>">
 
             <label for="wc">Baños</label>
-            <input name="propiedad[wc]" type="number" id="wc" placeholder="Ej:3" min="1"
-                max="9" value="<?php echo s($propiedad->wc);?>">
+            <input name="propiedad_caracteristicas[wc]" type="number" id="wc" placeholder="Ej:3" min="1"
+                max="9" value="<?php echo s($caracteristicas[1]->cantidad);?>">
 
             <label for="estacionamientos">Estacionamientos</label>
-            <input name="propiedad[estacionamientos]" type="number" id="estacionamientos" placeholder="Ej:3" min="1"
-                max="9" value="<?php echo s($propiedad->estacionamientos);?>">
+            <input name="propiedad_caracteristicas[estacionamientos]" type="number" id="estacionamientos" placeholder="Ej:3" min="1"
+                max="9" value="<?php echo s($caracteristicas[2]->cantidad);?>">
 
-        </fieldset>
+        </fieldset> 
 
         <fieldset>
             <legend>Vendedor</legend>
@@ -48,6 +48,5 @@
                         value="<?php echo s($vendedor->id)?>"><?php echo s($vendedor->nombre) . " " . s($vendedor->apellido);?></option>
                     <?php } ?>
             </select>
-
-            
+    
         </fieldset>

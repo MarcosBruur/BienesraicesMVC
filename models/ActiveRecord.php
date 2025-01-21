@@ -20,17 +20,17 @@ class ActiveRecord{
         self::$db = $db;
     }
 
-    public function guardar():void{
+    public function guardar($retorno):void{
         
         if(!is_null($this->id)){
             //Actualizando           
-            $this->actualizar();
+            $this->actualizar($retorno);
         }else{
             //Creando
-            $this->crear();
+            $this->crear($retorno);
         }
     }
-    public function crear(){
+    public function crear($retorno){
         //Sanitizar entradas
         $atributos = $this->sanitizarAtributos();
         
@@ -40,16 +40,17 @@ class ActiveRecord{
         $query .= join(", ",array_keys($atributos));
         $query .= " ) VALUES (' "; 
         $query .=  join("', '",array_values($atributos));
-        $query .= " ')";
+        $query .= "')";
+        
         
         $resultado = self::$db->query($query);
 
         if($resultado){
-            header('Location:/admin?resultado=1');
+            header("Location:/{$retorno}?resultado=1");
         }
     }
 
-    public function actualizar(){
+    public function actualizar($retorno){
         //Sanitizar entradas
         $atributos = $this->sanitizarAtributos();
         
@@ -71,12 +72,12 @@ class ActiveRecord{
         $resultado = self::$db->query($query);
         
         if($resultado){
-            header('Location: /admin?resultado=2');
+            header("Location: /{$retorno}?resultado=2");
         }
 
     }
 
-    public function eliminar(){
+    public function eliminar($ruta){
         //Desvincular vendedor en caso de tener propiedad asignada   
         
         if(static::$tabla === 'vendedores'){
@@ -91,7 +92,7 @@ class ActiveRecord{
         
         if($resultado){
             $this->eliminarImagen();
-            header("Location: /admin?resultado=3");
+            header("Location: /{$ruta}?resultado=3");
         }
     }
 
@@ -138,6 +139,17 @@ class ActiveRecord{
         }
     }
 
+    public function setIcono($icono){
+        //Eliminar icono previo
+        //if(!is_null($this->id)){
+        //    $this->eliminarIcono();
+        //}
+
+        if($icono){
+            $this->icono = $icono;
+        }
+    }
+
     //Eliminar archivos
     public function eliminarImagen(){
         $exiteArchivo = file_exists(CARPETA_IMAGENES . $this->imagen);
@@ -145,6 +157,14 @@ class ActiveRecord{
                 unlink(CARPETA_IMAGENES . $this->imagen);
             }
     }
+
+    public function eliminarIcono(){
+        $exiteArchivo = file_exists(CARPETA_ICONOS . $this->icono);
+            if($exiteArchivo){
+                unlink(CARPETA_ICONOS . $this->icono);
+            }
+    }
+
     public static function all(){
         $query = "SELECT * FROM ".static::$tabla;
         $resultado =self::consultarSQL($query);
@@ -160,8 +180,15 @@ class ActiveRecord{
         return $resultado;
     }
 
-    public static function find($id){
-        $query = "SELECT * FROM ".static::$tabla." WHERE id = {$id}";
+    public static function find($id,$caract = false){
+        if($caract){
+            $query = "SELECT * FROM propiedad_caracteristica WHERE propiedad_id = {$id}";
+            $resultado = self::consultarSQL($query);
+            return $resultado;
+        }else{
+            $query = "SELECT * FROM ".static::$tabla." WHERE id = {$id}";
+        }
+        
         $resultado = self::consultarSQL($query);
         return array_shift($resultado);
     }
@@ -193,7 +220,8 @@ class ActiveRecord{
 
     //Sincronizar objeto en memoria con info insertada por usuario
 
-    public function sincronizar($args =[]){
+    public function sincronizar($args = [] ){
+       
         foreach($args as $key => $value){
             
             if(property_exists($this,$key) && !is_null($value)){

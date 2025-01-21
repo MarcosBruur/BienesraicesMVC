@@ -16,3 +16,9 @@
     @include boton($verde,block);
 
 }
+.boton-azul{
+    @include boton($azul,inline-block);
+}
+.boton-azul-block{
+    @include boton($azul,block);
+}

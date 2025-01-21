@@ -15,7 +15,7 @@ class VendedorController{
             $errores = $vendedor->validar();
 
             if(empty($errores)){
-                $vendedor->guardar();
+                $vendedor->guardar('admin');
             }
 
         }
@@ -39,7 +39,7 @@ class VendedorController{
             $vendedor->validar();
 
             if(empty($errores)){
-                $vendedor->guardar();
+                $vendedor->guardar('admin');
             }
         }
 

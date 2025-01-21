@@ -5,6 +5,7 @@ use Controllers\PropiedadController;
 use Controllers\VendedorController;
 use Controllers\PaginasController;
 use Controllers\LoginController;
+use Controllers\CaracteristicasController;
 
 $router = new Router();
 
@@ -22,6 +23,15 @@ $router->post('/vendedores/crear',[VendedorController::class,'crear']);
 $router->get('/vendedores/actualizar',[VendedorController::class,'actualizar']);
 $router->post('/vendedores/actualizar',[VendedorController::class,'actualizar']);
 $router->post('/vendedores/eliminar',[VendedorController::class,'eliminar']);
+
+//Rutas caracteristicas
+$router->get('/caracteristicas',[CaracteristicasController::class,'index']);
+$router->get('/caracteristicas/crear',[CaracteristicasController::class,'crear']);
+$router->post('/caracteristicas/crear',[CaracteristicasController::class,'crear']);
+$router->get('/caracteristicas/actualizar',[CaracteristicasController::class,'actualizar']);
+$router->post('/caracteristicas/actualizar',[CaracteristicasController::class,'actualizar']);
+$router->post('/caracteristicas/eliminar',[CaracteristicasController::class,'eliminar']);
+
 
 //Rutas publicas
 $router->get('/',[PaginasController::class,'index']);

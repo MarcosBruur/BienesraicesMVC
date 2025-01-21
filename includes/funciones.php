@@ -4,6 +4,7 @@
 define('TEMPLATES_URLS', __DIR__ .'/templates');
 define('FUNCIONES_URLS',__DIR__ .'funciones.php');
 define('CARPETA_IMAGENES',$_SERVER['DOCUMENT_ROOT'] . '/imagenes/');
+define('CARPETA_ICONOS',$_SERVER['DOCUMENT_ROOT'] . '/iconos/');
 function incluirTemplate(string $template,bool $inicio = false){
     
     include TEMPLATES_URLS . "/{$template}.php";
@@ -34,7 +35,7 @@ function s($html):string{
 
 //Validar tipo de contenido
 function validarTipoContenido($tipo){
-    $tipos = ['propiedad','vendedor'];
+    $tipos = ['propiedad','vendedor','caracteristica'];
     
     return in_array($tipo,$tipos);
 }
@@ -66,9 +67,16 @@ function mostrarNotificacion($codigo){
 function validarORedireccionar($url){
     $id = $_GET['id'];
     $id = filter_var($id, FILTER_VALIDATE_INT);
+    
 
-    if(!$id){
+
+    if(!$id ){
         header("Location: {$url}");
     }
+
+    
+
     return $id;
 }
+
+

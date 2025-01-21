@@ -5,17 +5,16 @@ namespace Model;
 class Propiedad extends ActiveRecord{
     protected static $tabla = 'propiedades';
     protected static $camposDB = ['id','titulo','precio','imagen',
-    'descripcion','habitaciones','wc','estacionamientos','creado',
+    'descripcion','creado',
     'vendedores_id'];
 
     public $id;
     public $titulo;
     public $precio;
     public $imagen;
+
     public $descripcion;
-    public $habitaciones;
-    public $wc;
-    public $estacionamientos;
+   
     public $creado;
     public $vendedores_id;
 
@@ -25,11 +24,8 @@ class Propiedad extends ActiveRecord{
         $this->precio = $args['precio'] ?? '';
         $this->imagen = $args['imagen'] ?? '';
         $this->descripcion = $args['descripcion'] ?? '';
-        $this->habitaciones = $args['habitaciones'] ?? '';
-        $this->wc = $args['wc'] ?? '';
-        $this->estacionamientos = $args['estacionamientos'] ?? '';
         $this->creado = date('Y/m/d');
-        $this->vendedores_id = $args['vendedorId'] ?? '';
+        $this->vendedores_id = $args['vendedores_id'] ?? '';
     }
 
 
@@ -48,18 +44,6 @@ class Propiedad extends ActiveRecord{
             self::$errores[] = 'La descripcion es obligatoria y debe tener minimo 20 caracteres';
         }
 
-        if(!$this->habitaciones){
-            self::$errores[] = 'La cantidad de habitaciones es obligatorio';
-        }
-
-        if(!$this->wc){
-            self::$errores[] = 'La cantidad de baños es obligatorio';
-        }
-
-        if(!$this->estacionamientos){
-            self::$errores[] = 'La cantidad de estacionamientos es obligatorio';
-        }
-
         if(!$this->vendedores_id){
             self::$errores[] = 'Debes elegir un vendedor';
         }
@@ -70,6 +54,55 @@ class Propiedad extends ActiveRecord{
 
        return self::$errores;
 
+    }
+
+    public function guardar($retorno,$caracteristicas = null):void{
+        
+        if(!is_null($this->id)){
+            //Actualizando           
+            $this->actualizar($retorno);
+        }else{
+            //Creando
+            $this->crear($retorno,$caracteristicas);
+        }
+    }
+
+
+    public function crear($retorno,$caracteristicas = null){
+        //Sanitizar entradas
+        $atributos = $this->sanitizarAtributos();
+        
+        
+        //Insertar propiedad en BD
+        $query = "INSERT INTO " . static::$tabla . " (";
+        $query .= join(", ",array_keys($atributos));
+        $query .= " ) VALUES (' "; 
+        $query .=  join("', '",array_values($atributos));
+        $query .= "')";
+        
+        $resultado = self::$db->query($query);
+        $propiedadId = self::$db->insert_id;
+      
+
+        if (!empty($caracteristicas)) {
+            foreach ($caracteristicas as $key => $value) {
+                // Obtener el ID de la característica
+                $query = "SELECT id FROM caracteristicas WHERE nombre = '$key' LIMIT 1";
+                $resultadoQuery = self::$db->query($query);
+    
+                if ($resultadoQuery && $resultadoQuery->num_rows > 0) {
+                    $row = $resultadoQuery->fetch_assoc();
+                    $caracteristicaId = $row['id'];
+    
+                    // Insertar en la tabla propiedad_caracteristica
+                    $queryRelacion = "INSERT INTO propiedad_caracteristica (propiedad_id, caracteristica_id,cantidad) VALUES ('$propiedadId', '$caracteristicaId','$value')";
+                    self::$db->query($queryRelacion);
+                }
+            }
+        }
+        if($resultado){
+            header("Location:/{$retorno}?resultado=1");
+        }
     }
 
 }

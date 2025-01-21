@@ -3,8 +3,10 @@ namespace Controllers;
 use MVC\Router;
 use Model\Propiedad;
 use Model\Vendedor;
+use Model\PropiedadCaracteristica;
 use Intervention\Image\ImageManager as Image;
 use Intervention\Image\Drivers\Gd\Driver;
+use Controllers\PropiedadCaracteristicasController;
 
 class PropiedadController{
     public static function index(Router $router){
@@ -21,12 +23,14 @@ class PropiedadController{
     public static function crear(Router $router){
         $propiedad = new Propiedad();
         $vendedores = Vendedor::all();
-        $errores = Propiedad::getErrores();
-
-        if($_SERVER['REQUEST_METHOD'] === 'POST'){
     
-            $propiedad = new Propiedad($_POST['propiedad']);
+
+        $errores = Propiedad::getErrores();
         
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){ 
+            
+            $propiedad = new Propiedad($_POST['propiedad']);
+            
             //Generar nombre unico de imagen
             $nombreImagen = md5(uniqid(rand(),true) . '.jpg');
         
@@ -52,12 +56,13 @@ class PropiedadController{
                 //Guardar imagen en servidor
                 $imagen->save(CARPETA_IMAGENES.$nombreImagen);
         
+                $caracteristicas = $_POST['propiedad_caracteristicas'];
                 //Guardar nueva propiedad
-                $propiedad->guardar();
+                $propiedad->guardar('admin',$caracteristicas);
+
+                //Guardar caracteristicas de propiedad
+                
             }
-        
-        
-            
         }
         
         $router->render('/propiedades/crear',[
@@ -72,18 +77,37 @@ class PropiedadController{
     public static function actualizar(Router $router){
         $id = validarORedireccionar('/admin');
 
-        $propiedad = Propiedad::find($id);
+        $caracteristicas = PropiedadCaracteristica::find($id,true);
+        $propiedad = Propiedad::find($id);       
         $errores = Propiedad::getErrores();
         $vendedores = Vendedor::all();
 
         
+        
+        
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
     
-    
             //Asignar los atributos
-            $args = $_POST['propiedad'];
+            $args1 = $_POST['propiedad'];
+            $args2 = $_POST['propiedad_caracteristicas'];
             
-            $propiedad->sincronizar($args);
+            
+            $propiedad->sincronizar($args1);
+
+            $arreglo =(array_values($args2));
+            
+            $i = 0;
+                foreach($caracteristicas as $caracteristica){
+                    $caracteristica->sincronizar($arreglo[$i]);
+                    $i++;
+                }
+            
+            
+            
+            
+
+            
+            
             
             //Validacion
             $propiedad->validar();
@@ -104,7 +128,12 @@ class PropiedadController{
             if(empty($errores)){
                 //Guardar propiedad
                 
-                $propiedad->guardar();
+                $propiedad->guardar('admin');
+                
+                foreach($caracteristicas as $caracteristica){
+                    $caracteristica->guardar('admin');
+                }
+                
             }
         
         
@@ -115,8 +144,8 @@ class PropiedadController{
         $router->render('/propiedades/actualizar',[
             "propiedad" => $propiedad,
             "errores" => $errores,
-            "vendedores" => $vendedores
-        ]);
+            "vendedores" => $vendedores,
+            "caracteristicas" => $caracteristicas]);
 
     }
 
