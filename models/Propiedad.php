@@ -6,7 +6,7 @@ class Propiedad extends ActiveRecord{
     protected static $tabla = 'propiedades';
     protected static $camposDB = ['id','titulo','precio','imagen',
     'descripcion','creado',
-    'vendedores_id'];
+    'vendedores_id','cantidad_caracteristicas'];
 
     public $id;
     public $titulo;
@@ -17,6 +17,8 @@ class Propiedad extends ActiveRecord{
    
     public $creado;
     public $vendedores_id;
+
+    public $cantidad_caracteristicas;
 
     public function __construct($args =[]){
         $this->id = $args['id'] ?? null;

@@ -12,28 +12,18 @@
                         <div class="contenido-caracteristicas">
                             <p class="precio">$<?php echo $propiedad->precio?></p>
                             <ul class="iconos-caracteristicas">
-                                <li>
-                                    <img class="icono" src="build/img/icono_wc.svg"
-                                        alt="icono wc"
-                                        loading="lazy">
-                                    <p><?php ?></p>
-                                </li>
-                                <li>
-                                    <img class="icono"
-                                        src="build/img/icono_estacionamiento.svg"
-                                        alt="icono estacionamiento" loading="lazy">
-                                    <p><?php ?></p>
-                                </li>
-
-                                <li>
-                                    <img class="icono"
-                                        src="build/img/icono_dormitorio.svg"
-                                        alt="icono dormitorio"
-                                        loading="lazy">
-                                    <p><?php ?></p>
-                                </li>
-
-                            </ul>
+                                    <?php for($i=0; $i < $propiedad->cantidad_caracteristicas; $i++);  { ?>
+                                    <li>
+                                        <?php for($i=0; $i < 3; $i++){ ?>
+                                        <img class="icono" src="/iconos/<?php echo $iconos[$i]?>"
+                                            alt="icono"
+                                            loading="lazy">
+                                        <p><?php echo $cantidades[$i]?></p>
+                                        <?php } ?>
+                                        
+                                    </li>
+                                    <?php } ?>
+                                </ul>
 
                             <a href="/propiedad?id=<?php echo $propiedad->id?>"
                                 class="boton boton-amarillo-block">Ver
@@ -43,4 +33,4 @@
                     </div><!--Contenido Anuncio-->
                 </div><!--Anuncio-->
         <?php }?>
-            </div><!--Contenedor Anuncios-->
+</div><!--Contenedor Anuncios-->

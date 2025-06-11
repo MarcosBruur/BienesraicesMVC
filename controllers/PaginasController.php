@@ -2,6 +2,8 @@
 namespace Controllers;
 use MVC\Router;
 use Model\Propiedad;
+use Model\PropiedadCaracteristica;
+use Model\Caracteristica;
 use PHPMailer\PHPMailer\PHPMailer;
 
 class PaginasController{
@@ -18,16 +20,53 @@ class PaginasController{
     }
     public static function propiedades(Router $router){
         $propiedades = Propiedad::all();
+        $caracteristicas =[];
+
+        
+
+        foreach($propiedades as $propiedad){
+            $caracteristicas[$propiedad->id] = PropiedadCaracteristica::find($propiedad->id, true);    
+        }
+
+        
+        $iconos = [];
+
+        $cantidades = [];
+        $i = 0;
+        foreach($caracteristicas as $caracteristica){
+            foreach($caracteristica as $valores){
+                $cantidades[$i] = $valores->cantidad;
+                $iconos[$i] = Caracteristica::find($valores->caracteristica_id)->icono;
+                $i++;
+            }
+        }
+        
+        
+        
+        
         $router->render('/paginas/propiedades',[
-            "propiedades" => $propiedades
+            "propiedades" => $propiedades,
+            "iconos" => $iconos,
+            "cantidades" => $cantidades
         ]);
         
     }
     public static function propiedad(Router $router){
         $id = validarORedireccionar('/');
         $propiedad = Propiedad::find($id);
+        $caracteristicas = PropiedadCaracteristica::find($id,true);
+        
+        
+        
+
+        foreach($caracteristicas as $caracteristica){
+            $iconos[] = Caracteristica::find($caracteristica->caracteristica_id);
+        }
+        
         $router->render('/paginas/propiedad',[
-            "propiedad" => $propiedad
+            "propiedad" => $propiedad,
+            "caracteristicas" => $caracteristicas,
+            "iconos" => $iconos
         ]);
     }
     public static function entrada(Router $router){

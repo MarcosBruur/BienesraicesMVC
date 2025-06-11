@@ -6,29 +6,18 @@
 
             <div class="resumen-propiedad">
                 <p class="precio">$<?php echo $propiedad->precio?></p>
-
+            <?php $i =0;
+            ?>
                 <ul class="iconos-caracteristicas">
+                    <?php foreach($caracteristicas as $caracteristica) { ?>
                     <li>
-                        <img class="icono" src="build/img/icono_wc.svg"
+                        <img class="icono" src="/iconos/<?php echo $iconos[$i]->icono;?>"
                             alt="icono wc"
                             loading="lazy">
-                        <p><?php echo $propiedad->wc?></p>
+                        <p><?php echo $caracteristica->cantidad?></p>
                     </li>
-                    <li>
-                        <img class="icono"
-                            src="build/img/icono_estacionamiento.svg"
-                            alt="icono estacionamiento" loading="lazy">
-                        <p><?php echo $propiedad->estacionamientos?></p>
-                    </li>
-
-                    <li>
-                        <img class="icono" src="build/img/icono_dormitorio.svg"
-                            alt="icono dormitorio"
-                            loading="lazy">
-                        <p><?php echo $propiedad->habitaciones?></p>
-                    </li>
+                    <?php $i++;} ?>
                 </ul>
-
                 <p><?php echo $propiedad->descripcion?>
                 </p>
                 <p><?php echo $propiedad->descripcion?>
